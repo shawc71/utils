@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "$1" ]
+  then
+    echo "No current tag version provided"
+    return 1
+fi
+if [ -z "$2" ]
+  then
+    echo "No next tag version provided"
+    return 1
+fi
+
+git log --pretty='format: %s' "$1"... | git tag -a "$2" -F - && git push origin $2
