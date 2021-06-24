@@ -1,0 +1,47 @@
+#!/bin/sh
+
+set -e
+
+usage() {
+    
+    echo "usage: run from ppn-jobs directory"
+    printf "\n\tjobs-pr <package-to-update> <version-tag>\n"
+    printf "example:\n\tjobs-pr ppn-foo-bar v1.1.0\n"
+}
+
+currDir=$(eval "basename '$PWD'")
+
+if [ "ppn-jobs" != "$currDir" ]; then
+    echo "must be ran from ppn-jobs repo directory"
+    usage
+    exit 1
+fi
+
+if [ -z "$1" ]
+    then
+        echo "no job repo provided"
+        usage
+        exit 1
+fi
+
+if [ -z "$2" ]
+    then
+        echo "no version tag provided"
+        usage
+        exit 1
+fi
+
+branchName="a1/bump-$1-$2"
+
+git checkout master 
+git pull 
+git submodule update
+
+cd jobs/"$1"
+git fetch
+git checkout "$2"
+cd ../..
+git checkout -b "$branchName"
+git add .
+git commit --no-verify -m "Bump up $1 to $2" 
+git push --set-upstream origin "$branchName"
