@@ -15,5 +15,5 @@ if [ -n "$out" ]; then
     exitcode=1
 fi
 
-git diff --cached --name-only | awk '{print $1}' | egrep ".go$" | xargs git add .
+git diff --cached --name-only | awk '{print $1}' | egrep ".go$" | xargs git add 
 exit $exitcode
