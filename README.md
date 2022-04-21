@@ -4,4 +4,4 @@ random helper scripts
 
 ## jobs-pr
 to install run:
-`./install-jobs-pr.sh`
+`curl https://raw.githubusercontent.com/shawc71/utils/master/install-jobs-pr.sh | sh`
