@@ -5,12 +5,13 @@ set -e
 usage() {
     
     echo "usage: run from ppn-jobs directory"
-    printf "\n\tjobs-pr <package-to-update> <version-tag>\n"
+    printf "\n\tjobs-pr <package-to-update> <version-tag> [jira-ticket-id]\n"
     printf "example:\n\tjobs-pr ppn-foo-bar v1.1.0\n"
+    printf "example with jira ticket id:\n\tjobs-pr ppn-foo-bar v1.1.0 PPN-1234\n"
 }
 
 currDir=$(eval "basename '$PWD'")
-
+jiraTicket=""
 if [ "ppn-jobs" != "$currDir" ]; then
     echo "must be ran from ppn-jobs repo directory"
     usage
@@ -31,8 +32,12 @@ if [ -z "$2" ]
         exit 1
 fi
 
-branchName="a1/bump-$1-$2"
+if [ -n "$3" ]
+    then
+        jiraTicket="$3: "
+fi
 
+branchName="a1/bump-$1-$2"
 git checkout master 
 git pull 
 git submodule update
@@ -43,5 +48,6 @@ git checkout "$2"
 cd ../..
 git checkout -b "$branchName"
 git add .
-git commit --no-verify -m "Bump up $1 to $2" 
+commitMessage=${jiraTicket}"Bump $branchName"
+git commit --no-verify -m "$commitMessage" 
 git push --set-upstream origin "$branchName"
