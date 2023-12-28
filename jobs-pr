@@ -10,10 +10,9 @@ usage() {
     printf "example with jira ticket id:\n\tjobs-pr ppn-foo-bar v1.1.0 PPN-1234\n"
 }
 
-currDir=$(eval "basename '$PWD'")
 jiraTicket=""
-if [ "ppn-jobs" != "$currDir" ]; then
-    echo "must be ran from ppn-jobs repo directory"
+if [ ! -d "jobs" ]; then
+    echo "must be ran from the top level of the jobs submodule repo"
     usage
     exit 1
 fi
